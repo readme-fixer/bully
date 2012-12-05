@@ -62,6 +62,9 @@
 - (void)dealloc {
 	[_reachability stopNotifier];
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
+
+	_automaticallyReconnect = NO;
+	_automaticallyDisconnectInBackground = NO;
 	[self disconnect];
 }
 
@@ -69,32 +72,42 @@
 #pragma mark - Initializer
 
 - (id)initWithAppKey:(NSString *)appKey delegate:(id<BLYClientDelegate>)delegate {
-	if ((self = [super init])) {
+    return [self initWithAppKey:appKey delegate:delegate hostName:nil];
+}
+
+- (id)initWithAppKey:(NSString *)appKey delegate:(id<BLYClientDelegate>)delegate hostName:(NSString *)hostName {
+    if ((self = [super init])) {
 		self.appKey = appKey;
 		self.delegate = delegate;
-
+        
 		// Automatically reconnect by default
 		_automaticallyReconnect = YES;
-
+        
+        if (hostName != nil) {
+            _hostName = hostName;
+        } else {
+            _hostName = @"ws.pusherapp.com";
+        }
+        
 		NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-
+        
 #if TARGET_OS_IPHONE
 		// Assume we don't start in the background
 		_appIsBackgrounded = NO;
-
+        
 		// Automatically disconnect in the background by default
 		_automaticallyDisconnectInBackground = YES;
-
+        
 		// Listen for background changes
 		[notificationCenter addObserver:self selector:@selector(_appDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 		[notificationCenter addObserver:self selector:@selector(_appDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 #endif
-
+        
 		// Start reachability
-		_reachability = [Reachability reachabilityWithHostname:@"ws.pusherapp.com"];
+		_reachability = [Reachability reachabilityWithHostname:self.hostName];
 		[_reachability startNotifier];
 		[notificationCenter addObserver:self selector:@selector(_reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
-
+        
 		// Connect!
 		[self connect];
 	}
@@ -134,7 +147,7 @@
 		return;
 	}
 
-	NSString *urlString = [[NSString alloc] initWithFormat:@"wss://ws.pusherapp.com/app/%@?protocol=5&client=bully&version=%@&flash=false", self.appKey, [[self class] version]];
+	NSString *urlString = [[NSString alloc] initWithFormat:@"wss://%@/app/%@?protocol=5&client=bully&version=%@&flash=false", self.hostName, self.appKey, [[self class] version]];
 	NSURL *url = [[NSURL alloc] initWithString:urlString];
 	self.webSocket = [[SRWebSocket alloc] initWithURL:url];
 	[self.webSocket open];
@@ -185,12 +198,12 @@
 	if (self.webSocket.readyState != SR_OPEN) {
 		return;
 	}
-
+    
 	NSDictionary *object = [[NSDictionary alloc] initWithObjectsAndKeys:
 							eventName, @"event",
 							dictionary, @"data",
 							nil];
-	[self.webSocket send:[NSJSONSerialization dataWithJSONObject:object options:0 error:nil]];
+	[self.webSocket send:[NSJSONSerialization dataWithJSONObject:object options:NSJSONReadingAllowFragments error:nil]];
 }
 
 
@@ -256,7 +269,7 @@
 #pragma mark - SRWebSocketDelegate
 
 - (void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)messageString {
-    //	NSLog(@"webSocket:didReceiveMessage: %@", messageString);
+    //  NSLog(@"webSocket:didReceiveMessage: %@", messageString);
     
 	NSData *messageData = [(NSString *)messageString dataUsingEncoding:NSUTF8StringEncoding];
 	NSDictionary *message = [NSJSONSerialization JSONObjectWithData:messageData options:0 error:nil];
