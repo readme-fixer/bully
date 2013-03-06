@@ -20,7 +20,7 @@
 
 
 - (void)bindToEvent:(NSString *)eventName block:(BLYChannelEventBlock)block {
-	[self.subscriptions setObject:block forKey:eventName];
+	[self.subscriptions setObject:[block copy] forKey:eventName];
 }
 
 
