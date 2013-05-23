@@ -38,6 +38,13 @@
 			remoteGlobalIDString = F6B2082C1450F597009315AF;
 			remoteInfo = SocketRocket;
 		};
+		94FAE7FF174E93800037373E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B2587F0D1579E798009D7B44 /* SocketRocket.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B2EB6A7315DB5C800035AD92;
+			remoteInfo = SocketRocketOSXLibrary;
+		};
 		B2587F5F1579E798009D7B44 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = B2587F0D1579E798009D7B44 /* SocketRocket.xcodeproj */;
@@ -175,6 +182,7 @@
 				B2587F621579E798009D7B44 /* SocketRocket.framework */,
 				B2587F641579E798009D7B44 /* SRWebSocketTests.octest */,
 				B2587F661579E798009D7B44 /* TestChat.app */,
+				94FAE800174E93800037373E /* libSocketRocketOSXLibrary.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -301,6 +309,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		94FAE800174E93800037373E /* libSocketRocketOSXLibrary.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libSocketRocketOSXLibrary.a;
+			remoteRef = 94FAE7FF174E93800037373E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		B2587F601579E798009D7B44 /* libSocketRocket.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -373,7 +388,6 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -404,7 +418,6 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
