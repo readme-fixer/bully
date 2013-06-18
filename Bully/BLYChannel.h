@@ -12,6 +12,7 @@
 @class BLYChannel;
 
 typedef void (^BLYChannelEventBlock)(id message);
+typedef void (^BLYChannelCatchAllEventBlock)(NSString *eventName, id message);
 typedef void (^BLYChannelAuthenticationBlock)(BLYChannel *channel);
 
 typedef enum {
@@ -28,6 +29,7 @@ typedef void (^BLYErrorBlock)(NSError *error, BLYErrorType errorType);
 @property (nonatomic, strong, readonly) NSDictionary *authenticationParameters;
 @property (nonatomic, strong, readonly) NSData *authenticationParametersData;
 @property (nonatomic, copy) BLYErrorBlock errorBlock;
+@property (nonatomic, copy) BLYChannelCatchAllEventBlock catchAllBlock;
 
 - (BOOL)isPrivate;
 

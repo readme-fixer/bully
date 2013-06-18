@@ -368,7 +368,13 @@ NSString *const BLYClientErrorDomain = @"BLYClientErrorDomain";
 			if (block) {
 				// Call their block with the event data
 				block(eventMessage);
+                return;
 			}
+            if (channel.catchAllBlock) {
+                // Call the catch all block
+                channel.catchAllBlock(eventName, eventMessage);
+                return;
+            }
 			return;
 		}
 
