@@ -17,7 +17,7 @@ Bully tries to mirror the [Pusher JavaScript library](http://pusher.com/docs/cli
 #### Import the headers
 
 ``` objective-c
-#import <Bully/Bully.h>
+# import <Bully/Bully.h>
 ```
 
 Simple as that.
